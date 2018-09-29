@@ -1,3 +1,6 @@
 [submodule "vapor"]
 	path = vapor
 	url = git@github.com:c8112002/todo-vapor.git
+[submodule "vue-typescript"]
+	path = vue-typescript
+	url = git@github.com:c8112002/todo-vue-typescript.git
