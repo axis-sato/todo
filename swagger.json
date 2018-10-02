@@ -24,16 +24,12 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Todo"
+                "$ref": "#/components/schemas/Todo"
               }
             }
           },
           "500": {
-            "description": "Invalid input",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       },
@@ -48,7 +44,7 @@
             "description": "新規追加するTodo",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Todo"
+              "$ref": "#/components/schemas/Todo"
             }
           }
         ],
@@ -58,23 +54,15 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Todo"
+                "$ref": "#/components/schemas/Todo"
               }
             }
           },
-          "405": {
-            "description": "Validation exception",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
           },
           "500": {
-            "description": "Invalid input",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
@@ -97,29 +85,17 @@
             "description": "成功",
             "schema": {
               "type": "object",
-              "$ref": "#/definitions/Todo"
+              "$ref": "#/components/schemas/Todo"
             }
           },
           "400": {
-            "description": "Invalid ID supplied",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+            "$ref": "#/components/responses/ValidationError"
           },
           "404": {
-            "description": "Todo not found",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+            "$ref": "#/components/responses/NotFound"
           },
           "500": {
-            "description": "Invalid input",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+            "$ref": "#/components/responses/ServerError"
           }
         }
       },
@@ -140,7 +116,7 @@
             "description": "変更するtodo",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Todo"
+              "$ref": "#/components/schemas/Todo"
             }
           }
         ],
@@ -148,32 +124,17 @@
           "200": {
             "description": "成功",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Todo"
-              }
+              "$ref": "#/components/schemas/Todo"
             }
           },
           "400": {
-            "description": "Invalid ID supplied",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+            "$ref": "#/components/responses/ValidationError"
           },
           "404": {
-            "description": "Todo not found",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+            "$ref": "#/components/responses/NotFound"
           },
-          "405": {
-            "description": "Validation exception",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+          "500": {
+            "$ref": "#/components/responses/ServerError"
           }
         }
       },
@@ -194,66 +155,79 @@
             "description": "成功"
           },
           "400": {
-            "description": "Invalid ID supplied",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+            "$ref": "#/components/responses/ValidationError"
           },
           "404": {
-            "description": "Todo not found",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+            "$ref": "#/components/responses/NotFound"
           },
-          "405": {
-            "description": "Validation exception",
-            "schema": {
-              "type": "object",
-              "$ref": "#/definitions/Errors"
-            }
+          "500": {
+            "$ref": "#/components/responses/ServerError"
           }
         }
       }
     }
   },
-  "definitions": {
-    "Todo": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "readOnly": true
+  "components": {
+    "schemas": {
+      "Todo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "done": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
         },
-        "title": {
-          "type": "string"
-        },
-        "detail": {
-          "type": "string"
-        },
-        "done": {
-          "type": "boolean",
-          "default": false
+        "required": ["code", "message"]
+      },
+      "Errors": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Error"
         }
       }
     },
-    "Error": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer"
-        },
-        "message": {
-          "type": "string"
+    "responses": {
+      "ValidationError": {
+        "description": "Validation error",
+        "schema": {
+          "type": "object",
+          "$ref": "#/components/schemas/Errors"
         }
       },
-      "required": ["code", "message"]
-    },
-    "Errors": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Error"
+      "NotFound": {
+        "description": "Not found",
+        "schema": {
+          "type": "object",
+          "$ref": "#/components/schemas/Errors"
+        }
+      },
+      "ServerError": {
+        "description": "Server error",
+        "schema": {
+          "type": "object",
+          "$ref": "#/components/schemas/Errors"
+        }
       }
     }
   }
